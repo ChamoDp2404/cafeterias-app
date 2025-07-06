@@ -1,1 +1,21 @@
-<p>cafeteria-list works!</p>
+<h2>Lista de Cafeterías</h2>
+
+<button [routerLink]="['/cafeterias/nueva']">Agregar nueva cafetería</button>
+
+<ul *ngIf="cafeterias$ | async as cafeterias; else cargando">
+  <li *ngFor="let cafe of cafeterias">
+    <strong>{{ cafe.nombre }}</strong><br>
+    Dirección: {{ cafe.direccion }}<br>
+    Horario: {{ cafe.horario }}<br>
+    Descripción: {{ cafe.descripcion }}<br>
+
+    <a [routerLink]="['/cafeterias', cafe.id]">Ver detalle</a> |
+    <a [routerLink]="['/cafeterias/editar', cafe.id]">Editar</a> |
+    <button (click)="eliminar(cafe.id!)">Eliminar</button>
+    <hr />
+  </li>
+</ul>
+
+<ng-template #cargando>
+  <p>Cargando cafeterías...</p>
+</ng-template>

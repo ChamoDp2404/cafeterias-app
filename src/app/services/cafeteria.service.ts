@@ -8,13 +8,12 @@ import { Cafeteria } from '../models/cafeteria.model';
 })
 export class CafeteriaService {
 
-  private colRef = collection(this.firestore, 'cafeterias');
-
   constructor(private firestore: Firestore) {}
 
   getCafeterias(): Observable<Cafeteria[]> {
-    return collectionData(this.colRef, { idField: 'id' }) as Observable<Cafeteria[]>;
-  }
+  const colRef = collection(this.firestore, 'cafeterias'); // 👈 mover aquí
+  return collectionData(colRef, { idField: 'id' }) as Observable<Cafeteria[]>;
+}
 
   getCafeteriaById(id: string): Observable<Cafeteria> {
     const docRef = doc(this.firestore, `cafeterias/${id}`);
@@ -22,8 +21,9 @@ export class CafeteriaService {
   }
 
   addCafeteria(cafeteria: Cafeteria): Promise<any> {
-    return addDoc(this.colRef, cafeteria);
-  }
+  const colRef = collection(this.firestore, 'cafeterias');
+  return addDoc(colRef, cafeteria);
+}
 
   updateCafeteria(id: string, cafeteria: Cafeteria): Promise<void> {
     const docRef = doc(this.firestore, `cafeterias/${id}`);

@@ -1,1 +1,26 @@
-<p>cafeteria-form works!</p>
+<h2>{{ modoEdicion ? 'Editar Cafetería' : 'Nueva Cafetería' }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="guardar()">
+
+  <label>Nombre:</label>
+  <input formControlName="nombre" />
+  <div *ngIf="form.get('nombre')?.invalid && form.get('nombre')?.touched">
+    <small style="color: red;">El nombre es obligatorio.</small>
+  </div>
+
+  <label>Dirección:</label>
+  <input formControlName="direccion" />
+  <div *ngIf="form.get('direccion')?.invalid && form.get('direccion')?.touched">
+    <small style="color: red;">La dirección es obligatoria.</small>
+  </div>
+
+  <label>Horario:</label>
+  <input formControlName="horario" />
+
+  <label>Descripción:</label>
+  <textarea formControlName="descripcion"></textarea>
+
+  <button type="submit" [disabled]="form.invalid">
+    {{ modoEdicion ? 'Actualizar' : 'Guardar' }}
+  </button>
+</form>
