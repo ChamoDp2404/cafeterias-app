@@ -11,3 +11,4 @@ export const routes: Routes = [
   { path: 'cafeterias/:id', component: CafeteriaDetailComponent },
   { path: '**', redirectTo: 'cafeterias' }
 ];
+  

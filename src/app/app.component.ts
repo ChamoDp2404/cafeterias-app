@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { CafeteriaListComponent } from './pages/cafeteria-list/cafeteria-list.component';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CafeteriaListComponent],
-  template: `<app-cafeteria-list></app-cafeteria-list>`,
+  imports: [RouterOutlet],
+  template: `<router-outlet></router-outlet>`,
 })
 export class AppComponent {}
+
