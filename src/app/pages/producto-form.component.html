@@ -1,0 +1,28 @@
+<h2>Nuevo Producto</h2>
+
+<form [formGroup]="form" (ngSubmit)="guardar()">
+
+  <label>Nombre:</label>
+  <input formControlName="nombre" />
+  <div *ngIf="form.get('nombre')?.invalid && form.get('nombre')?.touched">
+    <small style="color:red;">El nombre es obligatorio.</small>
+  </div>
+
+  <label>Precio (S/):</label>
+  <input type="number" formControlName="precio" />
+  <div *ngIf="form.get('precio')?.invalid && form.get('precio')?.touched">
+    <small style="color:red;">El precio debe ser mayor a 0.</small>
+  </div>
+
+  <label>Categoría:</label>
+  <input formControlName="categoria" />
+  <div *ngIf="form.get('categoria')?.invalid && form.get('categoria')?.touched">
+    <small style="color:red;">La categoría es obligatoria.</small>
+  </div>
+
+  <label>Descripción:</label>
+  <textarea formControlName="descripcion"></textarea>
+
+  <br />
+  <button type="submit" [disabled]="form.invalid">Guardar producto</button>
+</form>

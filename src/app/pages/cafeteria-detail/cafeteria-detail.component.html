@@ -1,1 +1,40 @@
-<p>cafeteria-detail works!</p>
+<h2>Detalle de Cafetería</h2>
+
+<div *ngIf="cafeteria$ | async as cafe; else cargando">
+  <p><strong>Nombre:</strong> {{ cafe.nombre }}</p>
+  <p><strong>Dirección:</strong> {{ cafe.direccion }}</p>
+  <p><strong>Horario:</strong> {{ cafe.horario }}</p>
+  <p><strong>Descripción:</strong> {{ cafe.descripcion }}</p>
+
+  <a routerLink="/cafeterias">← Volver a la lista</a>
+
+  <hr />
+
+  <h3>Productos de esta cafetería</h3>
+
+  <a [routerLink]="['/cafeterias', cafe.id, 'productos', 'nuevo']">
+    <button>Agregar producto</button>
+  </a>
+
+  <ul *ngIf="productos$ | async as productos; else cargandoProductos">
+    <li *ngFor="let prod of productos">
+      <strong>{{ prod.nombre }}</strong> - S/ {{ prod.precio }}<br>
+      <em>Categoría:</em> {{ prod.categoria }}<br>
+      <p>{{ prod.descripcion }}</p>
+
+      <!-- ✅ Botones nuevos -->
+      <a [routerLink]="['/productos', 'editar', prod.id]">Editar</a> |
+      <button (click)="eliminarProducto(prod.id!)">Eliminar</button>
+
+      <hr />
+    </li>
+  </ul>
+
+  <ng-template #cargandoProductos>
+    <p>Cargando productos...</p>
+  </ng-template>
+</div> 
+
+<ng-template #cargando>
+  <p>Cargando detalles...</p>
+</ng-template>
