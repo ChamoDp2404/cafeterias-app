@@ -1,0 +1,4 @@
+<nav *ngIf="authService.isLoggedIn$ | async" style="padding: 1rem; background: #eee;">
+  <a routerLink="/cafeterias">Inicio</a> |
+  <button (click)="logout()">Cerrar sesión</button>
+</nav>

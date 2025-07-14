@@ -1,0 +1,17 @@
+<h2>Registro de Usuario</h2>
+
+<form [formGroup]="form" (ngSubmit)="registrar()">
+  <label>Email:</label>
+  <input type="email" formControlName="email" />
+  <div *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
+    <small style="color: red;">Email inválido.</small>
+  </div>
+
+  <label>Contraseña:</label>
+  <input type="password" formControlName="password" />
+  <div *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
+    <small style="color: red;">Mínimo 6 caracteres.</small>
+  </div>
+
+  <button type="submit" [disabled]="form.invalid">Registrarse</button>
+</form>
