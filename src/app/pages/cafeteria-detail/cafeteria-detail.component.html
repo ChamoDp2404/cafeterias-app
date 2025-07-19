@@ -1,40 +1,53 @@
-<h2>Detalle de Cafetería</h2>
+<div class="container mt-4">
+  <h2 class="text-primary mb-4">Detalle de Cafetería</h2>
 
-<div *ngIf="cafeteria$ | async as cafe; else cargando">
-  <p><strong>Nombre:</strong> {{ cafe.nombre }}</p>
-  <p><strong>Dirección:</strong> {{ cafe.direccion }}</p>
-  <p><strong>Horario:</strong> {{ cafe.horario }}</p>
-  <p><strong>Descripción:</strong> {{ cafe.descripcion }}</p>
+  <div *ngIf="cafeteria$ | async as cafe; else cargando">
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+        <h4 class="card-title">{{ cafe.nombre }}</h4>
+        <p><i class="bi bi-geo-alt-fill text-danger"></i> <strong>Dirección:</strong> {{ cafe.direccion }}</p>
+        <p><i class="bi bi-clock-fill text-warning"></i> <strong>Horario:</strong> {{ cafe.horario }}</p>
+        <p><i class="bi bi-info-circle-fill text-secondary"></i> <strong>Descripción:</strong> {{ cafe.descripcion }}</p>
 
-  <a routerLink="/cafeterias">← Volver a la lista</a>
+        <a routerLink="/cafeterias" class="btn btn-outline-secondary mt-3">
+          <i class="bi bi-arrow-left"></i> Volver a la lista
+        </a>
+      </div>
+    </div>
 
-  <hr />
+    <hr />
 
-  <h3>Productos de esta cafetería</h3>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h3 class="text-success">Productos de esta cafetería</h3>
+      <a [routerLink]="['/cafeterias', cafe.id, 'productos', 'nuevo']" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Agregar producto
+      </a>
+    </div>
 
-  <a [routerLink]="['/cafeterias', cafe.id, 'productos', 'nuevo']">
-    <button>Agregar producto</button>
-  </a>
+    <ul class="list-group" *ngIf="productos$ | async as productos; else cargandoProductos">
+      <li class="list-group-item" *ngFor="let prod of productos">
+        <h5 class="mb-1">{{ prod.nombre | uppercase }}</h5>
+        <small class="text-muted">Categoría: {{ prod.categoria | titlecase }}</small><br>
+        <strong>Precio:</strong> {{ prod.precio | currency:'PEN':'symbol' }}<br>
+        <p class="mb-1">{{ (prod.descripcion ?? '') | resumirTexto:100 }}</p>
 
-  <ul *ngIf="productos$ | async as productos; else cargandoProductos">
-    <li *ngFor="let prod of productos">
-      <strong>{{ prod.nombre }}</strong> - S/ {{ prod.precio }}<br>
-      <em>Categoría:</em> {{ prod.categoria }}<br>
-      <p>{{ prod.descripcion }}</p>
+        <div class="mt-2">
+          <a [routerLink]="['/productos', 'editar', prod.id]" class="btn btn-sm btn-outline-primary me-2">
+            <i class="bi bi-pencil-square"></i> Editar
+          </a>
+          <button (click)="eliminarProducto(prod.id!)" class="btn btn-sm btn-outline-danger">
+            <i class="bi bi-trash"></i> Eliminar
+          </button>
+        </div>
+      </li>
+    </ul>
 
-      <!-- ✅ Botones nuevos -->
-      <a [routerLink]="['/productos', 'editar', prod.id]">Editar</a> |
-      <button (click)="eliminarProducto(prod.id!)">Eliminar</button>
+    <ng-template #cargandoProductos>
+      <p class="text-muted">Cargando productos...</p>
+    </ng-template>
+  </div>
 
-      <hr />
-    </li>
-  </ul>
-
-  <ng-template #cargandoProductos>
-    <p>Cargando productos...</p>
+  <ng-template #cargando>
+    <p class="text-muted">Cargando detalles...</p>
   </ng-template>
-</div> 
-
-<ng-template #cargando>
-  <p>Cargando detalles...</p>
-</ng-template>
+</div>

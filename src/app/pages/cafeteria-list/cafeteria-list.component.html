@@ -1,21 +1,59 @@
-<h2>Lista de Cafeterías</h2>
+<h2 class="my-4 text-center">Lista de Cafeterías</h2>
 
-<button [routerLink]="['/cafeterias/nueva']">Agregar nueva cafetería</button>
+<!-- Botón + Ordenamiento -->
+<div class="d-flex flex-wrap align-items-center gap-3 mb-3">
+  <a [routerLink]="['/cafeterias/nueva']" class="btn btn-primary">
+    <i class="bi bi-plus-lg"></i> Agregar nueva cafetería
+  </a>
 
-<ul *ngIf="cafeterias$ | async as cafeterias; else cargando">
-  <li *ngFor="let cafe of cafeterias">
-    <strong>{{ cafe.nombre }}</strong><br>
-    Dirección: {{ cafe.direccion }}<br>
-    Horario: {{ cafe.horario }}<br>
-    Descripción: {{ cafe.descripcion }}<br>
+  <div class="form-group mb-0">
+    <label class="me-2">Ordenar por:</label>
+    <select [(ngModel)]="criterioOrden" (change)="ordenar()" class="form-select">
+      <option value="nombre">Nombre</option>
+    </select>
+  </div>
+</div>
 
-    <a [routerLink]="['/cafeterias', cafe.id]">Ver detalle</a> |
-    <a [routerLink]="['/cafeterias/editar', cafe.id]">Editar</a> |
-    <button (click)="eliminar(cafe.id!)">Eliminar</button>
-    <hr />
+<!-- Campo de búsqueda -->
+<input
+  type="text"
+  [(ngModel)]="terminoBusqueda"
+  placeholder="Buscar cafetería..."
+  class="form-control mb-4"
+  style="max-width: 300px;"
+>
+
+<!-- Mostrar lista si hay cafeterías -->
+<ul *ngIf="cafeteriasFiltradas().length > 0; else sinResultados" class="list-group">
+  <li *ngFor="let cafe of cafeteriasFiltradas()" class="list-group-item">
+    <h5 class="mb-1">{{ cafe.nombre }}</h5>
+    <p class="mb-1"><strong>Dirección:</strong> {{ cafe.direccion }}</p>
+    <p class="mb-1"><strong>Horario:</strong> {{ cafe.horario }}</p>
+    <p class="mb-2"><strong>Descripción:</strong> {{ (cafe.descripcion ?? '') | resumirTexto:100 }}</p>
+
+    <div class="d-flex gap-2">
+      <a [routerLink]="['/cafeterias', cafe.id]" class="btn btn-outline-info btn-sm">
+        Ver detalle
+      </a>
+      <a [routerLink]="['/cafeterias/editar', cafe.id]" class="btn btn-outline-warning btn-sm">
+        Editar
+      </a>
+      <button (click)="eliminar(cafe.id!)" class="btn btn-outline-danger btn-sm">
+        Eliminar
+      </button>
+    </div>
   </li>
 </ul>
 
-<ng-template #cargando>
-  <p>Cargando cafeterías...</p>
+<!-- Mostrar si no hay coincidencias -->
+<ng-template #sinResultados>
+  <p class="text-muted fst-italic" *ngIf="terminoBusqueda">
+    No se encontraron cafeterías que coincidan.
+  </p>
+  <ng-container *ngIf="!terminoBusqueda">
+    <div class="spinner-border text-secondary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="text-muted mt-2">Cargando cafeterías...</p>
+  </ng-container>
 </ng-template>

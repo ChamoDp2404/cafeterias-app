@@ -1,28 +1,38 @@
-<h2>Nuevo Producto</h2>
+<h2 class="mb-4 text-primary">Nuevo Producto</h2>
 
-<form [formGroup]="form" (ngSubmit)="guardar()">
+<form [formGroup]="form" (ngSubmit)="guardar()" class="border p-4 rounded bg-light">
 
-  <label>Nombre:</label>
-  <input formControlName="nombre" />
-  <div *ngIf="form.get('nombre')?.invalid && form.get('nombre')?.touched">
-    <small style="color:red;">El nombre es obligatorio.</small>
+  <div class="mb-3">
+    <label class="form-label">Nombre:</label>
+    <input type="text" formControlName="nombre" class="form-control" />
+    <div *ngIf="form.get('nombre')?.invalid && form.get('nombre')?.touched">
+      <small class="text-danger">El nombre es obligatorio.</small>
+    </div>
   </div>
 
-  <label>Precio (S/):</label>
-  <input type="number" formControlName="precio" />
-  <div *ngIf="form.get('precio')?.invalid && form.get('precio')?.touched">
-    <small style="color:red;">El precio debe ser mayor a 0.</small>
+  <div class="mb-3">
+    <label class="form-label">Precio (S/):</label>
+    <input type="number" formControlName="precio" class="form-control" />
+    <div *ngIf="form.get('precio')?.invalid && form.get('precio')?.touched">
+      <small class="text-danger">El precio debe ser mayor a 0.</small>
+    </div>
   </div>
 
-  <label>Categoría:</label>
-  <input formControlName="categoria" />
-  <div *ngIf="form.get('categoria')?.invalid && form.get('categoria')?.touched">
-    <small style="color:red;">La categoría es obligatoria.</small>
+  <div class="mb-3">
+    <label class="form-label">Categoría:</label>
+    <input type="text" formControlName="categoria" class="form-control" />
+    <div *ngIf="form.get('categoria')?.invalid && form.get('categoria')?.touched">
+      <small class="text-danger">La categoría es obligatoria.</small>
+    </div>
   </div>
 
-  <label>Descripción:</label>
-  <textarea formControlName="descripcion"></textarea>
+  <div class="mb-3">
+    <label class="form-label">Descripción:</label>
+    <textarea formControlName="descripcion" class="form-control" rows="3"></textarea>
+  </div>
 
-  <br />
-  <button type="submit" [disabled]="form.invalid">Guardar producto</button>
+  <button type="submit" class="btn btn-success" [disabled]="form.invalid">
+    Guardar producto
+  </button>
+
 </form>

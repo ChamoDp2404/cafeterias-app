@@ -1,17 +1,35 @@
-<h2>Registro de Usuario</h2>
+<div class="container mt-5" style="max-width: 400px;">
+  <h2 class="text-center text-success mb-4">
+    <i class="bi bi-person-plus-fill"></i> Registro de Usuario
+  </h2>
 
-<form [formGroup]="form" (ngSubmit)="registrar()">
-  <label>Email:</label>
-  <input type="email" formControlName="email" />
-  <div *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
-    <small style="color: red;">Email inválido.</small>
+  <form [formGroup]="form" (ngSubmit)="registrar()" class="border p-4 rounded shadow-sm bg-white">
+
+    <div class="mb-3">
+      <label class="form-label">Correo electrónico:</label>
+      <input type="email" formControlName="email" class="form-control" placeholder="ejemplo@correo.com" />
+      <div *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
+        <small class="text-danger">Email inválido.</small>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Contraseña:</label>
+      <input type="password" formControlName="password" class="form-control" placeholder="********" />
+      <div *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
+        <small class="text-danger">Mínimo 6 caracteres.</small>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-success w-100" [disabled]="form.invalid">
+      <i class="bi bi-check-circle"></i> Registrarse
+    </button>
+
+  </form>
+
+  <div class="text-center mt-3">
+    <a routerLink="/login" class="text-decoration-none">
+      ¿Ya tienes cuenta? <strong>Inicia sesión</strong>
+    </a>
   </div>
-
-  <label>Contraseña:</label>
-  <input type="password" formControlName="password" />
-  <div *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
-    <small style="color: red;">Mínimo 6 caracteres.</small>
-  </div>
-
-  <button type="submit" [disabled]="form.invalid">Registrarse</button>
-</form>
+</div>

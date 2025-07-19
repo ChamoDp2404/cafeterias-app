@@ -1,27 +1,59 @@
 import { Routes } from '@angular/router';
-import { CafeteriaListComponent } from './pages/cafeteria-list/cafeteria-list.component';
-import { CafeteriaDetailComponent } from './pages/cafeteria-detail/cafeteria-detail.component';
-import { CafeteriaFormComponent } from './pages/cafeteria-form/cafeteria-form.component';
-import { ProductoFormComponent } from './pages/producto-form.component';
-import { RegistroComponent } from './pages/registro/registro.component';
-import { LoginComponent } from './pages/login/login.component';
 import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   // Redirigir a login por defecto
   { path: '', redirectTo: 'login', pathMatch: 'full' },
 
-  // Rutas públicas
-  { path: 'login', component: LoginComponent },
-  { path: 'registro', component: RegistroComponent },
+  // Rutas públicas con Lazy Loading
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./pages/login/login.component').then(m => m.LoginComponent)
+  },
+  {
+    path: 'registro',
+    loadComponent: () =>
+      import('./pages/registro/registro.component').then(m => m.RegistroComponent)
+  },
 
-  // Rutas privadas protegidas por AuthGuard
-  { path: 'cafeterias', component: CafeteriaListComponent, canActivate: [AuthGuard] },
-  { path: 'cafeterias/nueva', component: CafeteriaFormComponent, canActivate: [AuthGuard] },
-  { path: 'cafeterias/editar/:id', component: CafeteriaFormComponent, canActivate: [AuthGuard] },
-  { path: 'cafeterias/:id', component: CafeteriaDetailComponent, canActivate: [AuthGuard] },
-  { path: 'cafeterias/:id/productos/nuevo', component: ProductoFormComponent, canActivate: [AuthGuard] },
-  { path: 'productos/editar/:id', component: ProductoFormComponent, canActivate: [AuthGuard] },
+  // Rutas privadas con Lazy Loading protegidas por AuthGuard
+  {
+    path: 'cafeterias',
+    canActivate: [AuthGuard],
+    loadComponent: () =>
+      import('./pages/cafeteria-list/cafeteria-list.component').then(m => m.CafeteriaListComponent)
+  },
+  {
+    path: 'cafeterias/nueva',
+    canActivate: [AuthGuard],
+    loadComponent: () =>
+      import('./pages/cafeteria-form/cafeteria-form.component').then(m => m.CafeteriaFormComponent)
+  },
+  {
+    path: 'cafeterias/editar/:id',
+    canActivate: [AuthGuard],
+    loadComponent: () =>
+      import('./pages/cafeteria-form/cafeteria-form.component').then(m => m.CafeteriaFormComponent)
+  },
+  {
+    path: 'cafeterias/:id',
+    canActivate: [AuthGuard],
+    loadComponent: () =>
+      import('./pages/cafeteria-detail/cafeteria-detail.component').then(m => m.CafeteriaDetailComponent)
+  },
+  {
+    path: 'cafeterias/:id/productos/nuevo',
+    canActivate: [AuthGuard],
+    loadComponent: () =>
+      import('./pages/producto-form.component').then(m => m.ProductoFormComponent)
+  },
+  {
+    path: 'productos/editar/:id',
+    canActivate: [AuthGuard],
+    loadComponent: () =>
+      import('./pages/producto-form.component').then(m => m.ProductoFormComponent)
+  },
 
   // Ruta comodín
   { path: '**', redirectTo: 'login' }

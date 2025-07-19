@@ -1,26 +1,56 @@
-<h2>{{ modoEdicion ? 'Editar Cafetería' : 'Nueva Cafetería' }}</h2>
+<div class="container mt-4">
+  <h2 class="text-primary mb-4">
+    {{ modoEdicion ? 'Editar Cafetería' : 'Nueva Cafetería' }}
+  </h2>
 
-<form [formGroup]="form" (ngSubmit)="guardar()">
+  <form [formGroup]="form" (ngSubmit)="guardar()">
 
-  <label>Nombre:</label>
-  <input formControlName="nombre" />
-  <div *ngIf="form.get('nombre')?.invalid && form.get('nombre')?.touched">
-    <small style="color: red;">El nombre es obligatorio.</small>
-  </div>
+    <div class="mb-3">
+      <label class="form-label">Nombre:</label>
+      <input
+        type="text"
+        formControlName="nombre"
+        class="form-control"
+        [ngClass]="{ 'is-invalid': form.get('nombre')?.invalid && form.get('nombre')?.touched }"
+      />
+      <div *ngIf="form.get('nombre')?.invalid && form.get('nombre')?.touched" class="invalid-feedback">
+        El nombre es obligatorio.
+      </div>
+    </div>
 
-  <label>Dirección:</label>
-  <input formControlName="direccion" />
-  <div *ngIf="form.get('direccion')?.invalid && form.get('direccion')?.touched">
-    <small style="color: red;">La dirección es obligatoria.</small>
-  </div>
+    <div class="mb-3">
+      <label class="form-label">Dirección:</label>
+      <input
+        type="text"
+        formControlName="direccion"
+        class="form-control"
+        [ngClass]="{ 'is-invalid': form.get('direccion')?.invalid && form.get('direccion')?.touched }"
+      />
+      <div *ngIf="form.get('direccion')?.invalid && form.get('direccion')?.touched" class="invalid-feedback">
+        La dirección es obligatoria.
+      </div>
+    </div>
 
-  <label>Horario:</label>
-  <input formControlName="horario" />
+    <div class="mb-3">
+      <label class="form-label">Horario:</label>
+      <input
+        type="text"
+        formControlName="horario"
+        class="form-control"
+      />
+    </div>
 
-  <label>Descripción:</label>
-  <textarea formControlName="descripcion"></textarea>
+    <div class="mb-3">
+      <label class="form-label">Descripción:</label>
+      <textarea
+        formControlName="descripcion"
+        class="form-control"
+        rows="3"
+      ></textarea>
+    </div>
 
-  <button type="submit" [disabled]="form.invalid">
-    {{ modoEdicion ? 'Actualizar' : 'Guardar' }}
-  </button>
-</form>
+    <button type="submit" class="btn btn-success" [disabled]="form.invalid">
+      {{ modoEdicion ? 'Actualizar' : 'Guardar' }}
+    </button>
+  </form>
+</div>

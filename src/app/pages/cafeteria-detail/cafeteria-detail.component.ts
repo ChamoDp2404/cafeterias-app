@@ -6,11 +6,12 @@ import { ProductoService } from '../../services/producto.service';
 import { Cafeteria } from '../../models/cafeteria.model';
 import { Producto } from '../../models/producto.model';
 import { Observable } from 'rxjs';
+import { ResumirTextoPipe } from '../../pipes/resumir-texto.pipe'; // ✅
 
 @Component({
   selector: 'app-cafeteria-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ResumirTextoPipe], // ✅
   templateUrl: './cafeteria-detail.component.html',
   styleUrls: ['./cafeteria-detail.component.css']
 })
@@ -31,12 +32,12 @@ export class CafeteriaDetailComponent implements OnInit {
       this.productos$ = this.productoService.getProductosPorCafeteria(id);
     }
   }
-  eliminarProducto(id: string): void {
-  if (confirm('¿Estás seguro de eliminar este producto?')) {
-    this.productoService.deleteProducto(id)
-      .then(() => console.log('✅ Producto eliminado'))
-      .catch(err => console.error('❌ Error al eliminar producto:', err));
-  }
-}
 
+  eliminarProducto(id: string): void {
+    if (confirm('¿Eliminar este producto?')) {
+      this.productoService.deleteProducto(id)
+        .then(() => console.log('✅ Producto eliminado'))
+        .catch(err => console.error('❌ Error al eliminar', err));
+    }
+  }
 }
