@@ -17,25 +17,26 @@
 
     <hr />
 
+    <!-- Botón de agregar producto -->
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h3 class="text-success">Productos de esta cafetería</h3>
-      <a [routerLink]="['/cafeterias', cafe.id, 'productos', 'nuevo']" class="btn btn-success">
+      <a *ngIf="rol === 'admin'" [routerLink]="['/cafeterias', cafe.id, 'productos', 'nuevo']" class="btn btn-success">
         <i class="bi bi-plus-circle"></i> Agregar producto
       </a>
     </div>
 
     <ul class="list-group" *ngIf="productos$ | async as productos; else cargandoProductos">
-      <li class="list-group-item" *ngFor="let prod of productos">
+      <li class="list-group-item" *ngFor="let prod of productos" [@fadeInOut]>
         <h5 class="mb-1">{{ prod.nombre | uppercase }}</h5>
         <small class="text-muted">Categoría: {{ prod.categoria | titlecase }}</small><br>
         <strong>Precio:</strong> {{ prod.precio | currency:'PEN':'symbol' }}<br>
         <p class="mb-1">{{ (prod.descripcion ?? '') | resumirTexto:100 }}</p>
 
         <div class="mt-2">
-          <a [routerLink]="['/productos', 'editar', prod.id]" class="btn btn-sm btn-outline-primary me-2">
+          <a *ngIf="rol === 'admin'" [routerLink]="['/productos', 'editar', prod.id]" class="btn btn-sm btn-outline-primary me-2">
             <i class="bi bi-pencil-square"></i> Editar
           </a>
-          <button (click)="eliminarProducto(prod.id!)" class="btn btn-sm btn-outline-danger">
+          <button *ngIf="rol === 'admin'" (click)="eliminarProducto(prod.id!)" class="btn btn-sm btn-outline-danger">
             <i class="bi bi-trash"></i> Eliminar
           </button>
         </div>
@@ -45,6 +46,35 @@
     <ng-template #cargandoProductos>
       <p class="text-muted">Cargando productos...</p>
     </ng-template>
+
+    <!-- 🗨️ Comentarios -->
+    <hr class="mt-4">
+    <h4 class="text-info mb-3">Comentarios</h4>
+
+    <!-- Lista de comentarios -->
+    <ul class="list-group mb-3" *ngIf="comentarios$ | async as comentarios">
+      <li class="list-group-item d-flex justify-content-between align-items-start" *ngFor="let com of comentarios" [@fadeInOut]>
+        <div>
+          <strong>{{ com.autor }}</strong> <br>
+          <small class="text-muted">{{ com.fecha | date:'short' }}</small>
+          <p class="mb-1 mt-1">{{ com.mensaje }}</p>
+        </div>
+        <button class="btn btn-sm btn-outline-danger" (click)="eliminarComentario(com.id!)">
+          <i class="bi bi-trash"></i>
+        </button>
+      </li>
+    </ul>
+
+    <!-- Formulario de nuevo comentario -->
+    <form (ngSubmit)="agregarComentario()" class="border rounded p-3 bg-light">
+      <div class="mb-3">
+        <label for="comentario" class="form-label">Escribe tu comentario</label>
+        <textarea id="comentario" [(ngModel)]="nuevoComentario" name="comentario" rows="3" class="form-control" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary" [disabled]="!nuevoComentario.trim()">
+        <i class="bi bi-send"></i> Comentar
+      </button>
+    </form>
   </div>
 
   <ng-template #cargando>

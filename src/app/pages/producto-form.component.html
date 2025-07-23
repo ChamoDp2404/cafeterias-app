@@ -1,7 +1,22 @@
-<h2 class="mb-4 text-primary">Nuevo Producto</h2>
+<h2 class="mb-4 text-primary">
+  {{ modoEdicion ? 'Editar Producto' : 'Nuevo Producto' }}
+</h2>
 
-<form [formGroup]="form" (ngSubmit)="guardar()" class="border p-4 rounded bg-light">
+<!-- Spinner de carga -->
+<div *ngIf="cargando" class="text-center">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Cargando...</span>
+  </div>
+</div>
 
+<!-- Formulario con animación y validación -->
+<form
+  *ngIf="!cargando"
+  [@fadeSlide]
+  [formGroup]="form"
+  (ngSubmit)="guardar()"
+  class="border p-4 rounded bg-light"
+>
   <div class="mb-3">
     <label class="form-label">Nombre:</label>
     <input type="text" formControlName="nombre" class="form-control" />
@@ -32,7 +47,6 @@
   </div>
 
   <button type="submit" class="btn btn-success" [disabled]="form.invalid">
-    Guardar producto
+    {{ modoEdicion ? 'Actualizar' : 'Guardar' }} producto
   </button>
-
 </form>

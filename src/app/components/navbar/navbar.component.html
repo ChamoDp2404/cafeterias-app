@@ -9,12 +9,22 @@
 
   <div class="collapse navbar-collapse" id="menuNavbar">
     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-      <li class="nav-item">
+
+      <!-- Cafeterías: visible para todos los roles autenticados -->
+      <li class="nav-item" *ngIf="rol === 'admin' || rol === 'usuario'">
         <a class="nav-link" routerLink="/cafeterias" routerLinkActive="active">
           <i class="bi bi-shop"></i> Cafeterías
         </a>
       </li>
+
+      <!-- Solo para admin: Agregar Cafetería -->
+      <li class="nav-item" *ngIf="rol === 'admin'">
+        <a class="nav-link" routerLink="/cafeterias/nueva" routerLinkActive="active">
+          <i class="bi bi-plus-circle-fill"></i> Nueva Cafetería
+        </a>
+      </li>
     </ul>
+
     <button class="btn btn-outline-light" (click)="logout()">
       <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
     </button>

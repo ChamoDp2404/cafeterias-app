@@ -5,21 +5,39 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
-  User
+  User,
+  authState // ✅ Importamos authState
 } from '@angular/fire/auth';
-import { BehaviorSubject } from 'rxjs';
+import { doc, Firestore, getDoc } from '@angular/fire/firestore';
+import { BehaviorSubject, Observable } from 'rxjs'; // ✅ Importamos Observable
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private usuarioActualSubject = new BehaviorSubject<User | null>(null);
-  isLoggedIn$ = this.usuarioActualSubject.asObservable(); // ✅ Usado en navbar.component.html
+  isLoggedIn$ = this.usuarioActualSubject.asObservable();
 
-  constructor(private auth: Auth) {
-    // Detecta cambios de sesión y actualiza el estado del usuario
-    onAuthStateChanged(this.auth, (user) => {
+  // ✅ Nuevo: observable del usuario actual
+  user$: Observable<User | null>; // 👈 Necesario para comentarios
+
+  // Nuevo: guardar el rol del usuario
+  private rolUsuario: 'admin' | 'usuario' | null = null;
+
+  constructor(private auth: Auth, private firestore: Firestore) {
+    this.user$ = authState(this.auth); // ✅ inicializa el observable
+
+    onAuthStateChanged(this.auth, async (user) => {
       this.usuarioActualSubject.next(user);
+
+      if (user) {
+        const docRef = doc(this.firestore, 'usuarios', user.uid);
+        const docSnap = await getDoc(docRef);
+        this.rolUsuario = docSnap.exists() ? (docSnap.data()['rol'] as 'admin' | 'usuario') : null;
+        console.log('🧑‍💼 Rol del usuario:', this.rolUsuario);
+      } else {
+        this.rolUsuario = null;
+      }
     });
   }
 
@@ -37,5 +55,10 @@ export class AuthService {
 
   get usuarioActual() {
     return this.auth.currentUser;
+  }
+
+  // Nuevo: obtener rol
+  get rolActual(): 'admin' | 'usuario' | null {
+    return this.rolUsuario;
   }
 }

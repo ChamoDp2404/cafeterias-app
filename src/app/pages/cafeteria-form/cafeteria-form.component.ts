@@ -4,13 +4,25 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CafeteriaService } from '../../services/cafeteria.service';
 import { Cafeteria } from '../../models/cafeteria.model';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-cafeteria-form',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './cafeteria-form.component.html',
-  styleUrls: ['./cafeteria-form.component.css']
+  styleUrls: ['./cafeteria-form.component.css'],
+  animations: [
+    trigger('fadeSlide', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(-10px)' }),
+        animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ]),
+      transition(':leave', [
+        animate('200ms ease-in', style({ opacity: 0, transform: 'translateY(-10px)' }))
+      ])
+    ])
+  ]
 })
 export class CafeteriaFormComponent implements OnInit {
   form!: FormGroup;
